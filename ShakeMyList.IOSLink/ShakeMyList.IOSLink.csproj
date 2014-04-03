@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A9E4D26E-2061-458E-9C6E-2DB8993BF277}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ShakeMyList.IOSLink</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>ShakeMyList.IOSLink</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+    <Reference Include="Mono.Data.Sqlite" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="Persistence\" />
+    <Folder Include="Presenters\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="..\ShakeMyList.Mobile\ApplicationFormats.cs">
+      <Link>ApplicationFormats.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\EnviromentDirectories.cs">
+      <Link>EnviromentDirectories.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\ShakeItem.cs">
+      <Link>ShakeItem.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\ShakeList.cs">
+      <Link>ShakeList.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\StringUtils.cs">
+      <Link>StringUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Views\IMenuView.cs">
+      <Link>Views\IMenuView.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Views\IShakeListEditorView.cs">
+      <Link>Views\IShakeListEditorView.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Views\IShakeListsManagerView.cs">
+      <Link>Views\IShakeListsManagerView.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Views\IShakeListViewerView.cs">
+      <Link>Views\IShakeListViewerView.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Presenters\MenuPresenter.cs">
+      <Link>Presenters\MenuPresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Presenters\ShakeListEditorPresenter.cs">
+      <Link>Presenters\ShakeListEditorPresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Presenters\ShakeListsManagerPresenter.cs">
+      <Link>Presenters\ShakeListsManagerPresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Presenters\ShakeListViewerPresenter.cs">
+      <Link>Presenters\ShakeListViewerPresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Persistence\DataBaseUpdater.cs">
+      <Link>Persistence\DataBaseUpdater.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Persistence\DBEnviroment.cs">
+      <Link>Persistence\DBEnviroment.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Persistence\PersistenceDefaultValues.cs">
+      <Link>Persistence\PersistenceDefaultValues.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Persistence\ShakeItem_DB.cs">
+      <Link>Persistence\ShakeItem_DB.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Persistence\ShakeList_DB.cs">
+      <Link>Persistence\ShakeList_DB.cs</Link>
+    </Compile>
+    <Compile Include="..\ShakeMyList.Mobile\Persistence\SQLiteLinker.cs">
+      <Link>Persistence\SQLiteLinker.cs</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

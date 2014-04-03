@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C0198A3A-A99A-4CE9-9D3D-73F2C70FBDCB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ShakeMyList.Mobile</RootNamespace>
+    <AssemblyName>ShakeMyList.Mobile</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="Mono.Data.Sqlite" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShakeList.cs" />
+    <Compile Include="ShakeItem.cs" />
+    <Compile Include="Views\IMenuView.cs" />
+    <Compile Include="Views\IShakeListEditorView.cs" />
+    <Compile Include="Views\IShakeListsManagerView.cs" />
+    <Compile Include="Views\IShakeListViewerView.cs" />
+    <Compile Include="Presenters\MenuPresenter.cs" />
+    <Compile Include="Presenters\ShakeListEditorPresenter.cs" />
+    <Compile Include="Presenters\ShakeListsManagerPresenter.cs" />
+    <Compile Include="Presenters\ShakeListViewerPresenter.cs" />
+    <Compile Include="Persistence\PersistenceDefaultValues.cs" />
+    <Compile Include="Persistence\SQLite.cs" />
+    <Compile Include="Persistence\DataBaseUpdater.cs" />
+    <Compile Include="EnviromentDirectories.cs" />
+    <Compile Include="Persistence\DBEnviroment.cs" />
+    <Compile Include="Persistence\SQLiteLinker.cs" />
+    <Compile Include="Persistence\ShakeList_DB.cs" />
+    <Compile Include="Persistence\ShakeItem_DB.cs" />
+    <Compile Include="ApplicationFormats.cs" />
+    <Compile Include="StringUtils.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Persistence\" />
+    <Folder Include="Presenters\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+</Project>
