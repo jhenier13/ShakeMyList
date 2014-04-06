@@ -49,19 +49,20 @@ namespace ShakeMyList.Mobile.Presenters
 
         public void MarkItem(int index)
         {
+            __list.MarkItem(index);
+            __view.Items[index].IsMarked = true;
         }
 
         public void UnMarkItem(int index)
         {
+            __list.UnmarkItem(index);
+            __view.Items[index].IsMarked = false;
         }
 
         public void MoveItem(int sourceIndex, int destinyIndex)
         {
             __list.MoveItem(sourceIndex, destinyIndex);
-
-            ShakeItem movedItem = __view.Items[sourceIndex];
-            __view.Items.RemoveAt(sourceIndex);
-            __view.Items.Insert(destinyIndex, movedItem);
+            __view.Items.Move(sourceIndex, destinyIndex);
         }
 
         public void SaveList()
@@ -72,8 +73,8 @@ namespace ShakeMyList.Mobile.Presenters
 
         public void ShakeTheList()
         {
-            __list.Reshuffle();
-            __view.RefreshItemsDraw();
+            List<MoveLog> changes = __list.Reshuffle();
+            __view.RefreshItemsDraw(changes);
         }
 
         public ShakeList Clone()

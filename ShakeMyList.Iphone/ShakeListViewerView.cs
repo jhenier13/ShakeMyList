@@ -16,6 +16,7 @@ namespace ShakeMyList.Iphone
         //Attributes
         private ShakeListViewerPresenter __presenter;
         private List<ShakeItem> __items;
+        private bool __isInternallyMoving;
         //UIControls
         private GridView __innerFrame;
         private UITableView __listItems;
@@ -49,6 +50,10 @@ namespace ShakeMyList.Iphone
                 __items = value;
                 __listSource = new NoEditShakeListItemsSource(__items);
                 __listSource.RowMoved += this.ItemsSource_RowMoved;
+                __listSource.RowLocked += this.ItemsSource_RowLocked;
+                __listSource.RowUnlocked += this.ItemsSource_RowUnlocked;
+                __listSource.RowMarked += this.ItemsSource_RowMarked;
+                __listSource.RowUnmarked += this.ItemsSource_RowUnmarked;
                 __listItems.Source = __listSource;
             }
         }
@@ -85,20 +90,55 @@ namespace ShakeMyList.Iphone
             __listItems.SetEditing(true, true);
         }
 
-        public void RefreshItemsDraw()
+        #region Required overrides for Shake Event
+
+        public override void ViewDidAppear(bool animated)
         {
-            __listItems.BeginUpdates();
-            NSIndexPath[] indexes = new NSIndexPath[__items.Count];
+            base.ViewDidAppear(animated);
+            this.BecomeFirstResponder();
+        }
 
-            for (int i = 0; i < __items.Count; i++)
+        public override void ViewDidDisappear(bool animated)
+        {
+            this.ResignFirstResponder();
+            base.ViewDidDisappear(animated);
+        }
+
+        public override bool CanBecomeFirstResponder
+        {
+            get
             {
-                NSIndexPath indexPath = NSIndexPath.FromRowSection(i, 0);
-                indexes[i] = indexPath;
+                return true;
             }
+        }
 
-            __listItems.ReloadRows(indexes, UITableViewRowAnimation.Automatic);
+        #endregion
 
-            __listItems.EndUpdates();
+        public override void MotionEnded(UIEventSubtype motion, UIEvent evt)
+        {
+            if (motion == UIEventSubtype.MotionShake)
+                this.ShakeDevice();
+
+            base.MotionEnded(motion, evt);
+        }
+
+        public void RefreshItemsDraw(IList<MoveLog> changes)
+        {
+            List<ShakeItem> itemsStartState = new List<ShakeItem>(__items);
+
+            for (int i = 0; i < changes.Count; i++)
+            {
+                MoveLog log = changes[i];
+
+                ShakeItem itemToMove = itemsStartState[log.OriginalIndex];
+                int itemIndexInView = __items.IndexOf(itemToMove);
+
+                NSIndexPath source = NSIndexPath.FromRowSection(itemIndexInView, 0);
+                NSIndexPath destiny = NSIndexPath.FromRowSection(log.ChangedIndex, 0);
+
+                __listItems.MoveRow(source, destiny);
+                __items.Move(source.Row, destiny.Row);
+            }
         }
 
         public void ShowMessage(string message)
@@ -136,6 +176,19 @@ namespace ShakeMyList.Iphone
             this.NavigationItem.RightBarButtonItem = __options;
 
             this.Add(__innerFrame);
+        }
+
+        private void ShakeDevice()
+        {
+            try
+            {
+                __isInternallyMoving = true;
+                __presenter.ShakeTheList();
+            }
+            finally
+            {
+                __isInternallyMoving = false;
+            }
         }
 
         private void GoToEditView()
@@ -187,16 +240,14 @@ namespace ShakeMyList.Iphone
 
         private void Shake_TouchDown(object sender, EventArgs e)
         {
-//            if (__items.Count < 3)
-//                return;
-//
-//            NSIndexPath source = NSIndexPath.FromRowSection(0, 0);
-//            NSIndexPath destiny = NSIndexPath.FromRowSection(2, 0);
-//            __listItems.MoveRow(source, destiny);
+            this.ShakeDevice();
         }
 
         private void ItemsSource_RowMoved(object sender, MoveRowEventArgs e)
         {
+            if (__isInternallyMoving)
+                return;
+
             __presenter.MoveItem(e.SourceIndex, e.DestinationIndex);
         }
 
@@ -208,6 +259,16 @@ namespace ShakeMyList.Iphone
         private void ItemsSource_RowUnlocked(object sender, RowLockEventArgs e)
         {
             __presenter.UnlockItem(e.Index);
+        }
+
+        private void ItemsSource_RowMarked(object sender, RowMarkedEventArgs e)
+        {
+            __presenter.MarkItem(e.Index);
+        }
+
+        private void ItemsSource_RowUnmarked(object sender, RowMarkedEventArgs e)
+        {
+            __presenter.UnMarkItem(e.Index);
         }
 
         private void Option_Selected(object sender, UIButtonEventArgs e)

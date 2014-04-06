@@ -56,6 +56,8 @@
     <Compile Include="Persistence\ShakeItem_DB.cs" />
     <Compile Include="ApplicationFormats.cs" />
     <Compile Include="StringUtils.cs" />
+    <Compile Include="RandomGenerator.cs" />
+    <Compile Include="ListUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

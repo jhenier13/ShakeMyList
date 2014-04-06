@@ -42,6 +42,23 @@ namespace ShakeMyList.Iphone
             set;
         }
 
+        public override bool Selected
+        {
+            get
+            {
+                return base.Selected;
+            }
+            set
+            {
+                base.Selected = value;
+
+                if (value)
+                    this.Accessory = UITableViewCellAccessory.Checkmark;
+                else
+                    this.Accessory = UITableViewCellAccessory.None;
+            }
+        }
+
         public NoEditShakeItemCell(string cellID) : base(UITableViewCellStyle.Default, cellID)
         {
             __lockButton = new UIButton(UIButtonType.Custom);

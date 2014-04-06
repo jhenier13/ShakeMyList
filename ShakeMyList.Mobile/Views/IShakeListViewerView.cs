@@ -9,7 +9,7 @@ namespace ShakeMyList.Mobile.Views
 
         List<ShakeItem> Items { get; set; }
 
-        void RefreshItemsDraw();
+        void RefreshItemsDraw(IList<MoveLog> changes);
 
         void ShowMessage(string message);
     }

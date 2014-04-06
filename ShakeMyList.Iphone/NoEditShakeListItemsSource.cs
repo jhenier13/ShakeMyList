@@ -15,6 +15,8 @@ namespace ShakeMyList.Iphone
         public event MoveRowEventHandler RowMoved;
         public event RowLockedEventHandler RowLocked;
         public event RowLockedEventHandler RowUnlocked;
+        public event RowMarkedEventHandler RowMarked;
+        public event RowMarkedEventHandler RowUnmarked;
 
         public NoEditShakeListItemsSource(IList<ShakeItem> items)
         {
@@ -44,6 +46,7 @@ namespace ShakeMyList.Iphone
             cell.TextLabel.Text = item.Name;
             cell.IsLocked = item.IsLocked;
             cell.Item = item;
+            cell.Selected = item.IsMarked;
 
             return cell;
         }
@@ -76,6 +79,22 @@ namespace ShakeMyList.Iphone
                 handler(this, new MoveRowEventArgs(){ SourceIndex = sourceIndexPath.Row, DestinationIndex = destinationIndexPath.Row });
         }
 
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            var handler = this.RowMarked;
+
+            if (handler != null)
+                handler(this, new RowMarkedEventArgs(){ Index = indexPath.Row });
+        }
+
+        public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
+        {
+            var handler = this.RowUnmarked;
+
+            if (handler != null)
+                handler(this, new RowMarkedEventArgs(){ Index = indexPath.Row });
+        }
+
         private void ShakeItemCell_Locked(object sender, EventArgs e)
         {
             NoEditShakeItemCell cell = sender as NoEditShakeItemCell;
@@ -104,6 +123,11 @@ namespace ShakeMyList.Iphone
         public int Index { get; set; }
 
         public bool IsLocked { get; set; }
+    }
+    public delegate void RowMarkedEventHandler(object sender,RowMarkedEventArgs e);
+    public class RowMarkedEventArgs : EventArgs
+    {
+        public int Index { get; set; }
     }
 }
 
