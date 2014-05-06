@@ -130,14 +130,17 @@ namespace ShakeMyList.Iphone
             {
                 MoveLog log = changes[i];
 
+                Console.WriteLine("MoveLog From: {0}  To: {1}", log.OriginalIndex, log.ChangedIndex);
                 ShakeItem itemToMove = itemsStartState[log.OriginalIndex];
                 int itemIndexInView = __items.IndexOf(itemToMove);
+                Console.WriteLine("ItemIndexInView: {0}", itemIndexInView);
 
                 NSIndexPath source = NSIndexPath.FromRowSection(itemIndexInView, 0);
                 NSIndexPath destiny = NSIndexPath.FromRowSection(log.ChangedIndex, 0);
 
                 __listItems.MoveRow(source, destiny);
                 __items.Move(source.Row, destiny.Row);
+                Console.WriteLine("MoveRow  From: {0}  To: {1}", source.Row, destiny.Row);
             }
         }
 

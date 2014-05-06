@@ -83,7 +83,8 @@ namespace ShakeMyList.Mobile
         {
             _items[index].IsMarked = false;
         }
-
+        //An item can no be put in the same place (at least not too much items)
+        //Maybe a max of 2 items
         public List<MoveLog> Reshuffle()
         {
             List<MoveLog> changesLog = new List<MoveLog>();
@@ -103,19 +104,26 @@ namespace ShakeMyList.Mobile
             //Put the un-locked items int new places
             for (int j = 0; j < _items.Count; j++)
             {
-                if (newItems[j] != null)
-                    continue;
+                if (newItems[j] == null)
+                {
+                    int randomIndex = RandomGenerator.GenerateInteger(0, unlockedIndexes.Count);
+                    int newItemIndex = unlockedIndexes[randomIndex];
+                    newItems[j] = _items[newItemIndex];
 
-                int randomIndex = RandomGenerator.GenerateInteger(0, unlockedIndexes.Count);
-                int newItemIndex = unlockedIndexes[randomIndex];
-                newItems[j] = _items[newItemIndex];
-
-                unlockedIndexes.RemoveAt(randomIndex);
-                changesLog.Add(new MoveLog(){ OriginalIndex = newItemIndex, ChangedIndex = j });
+                    unlockedIndexes.RemoveAt(randomIndex);
+                    changesLog.Add(new MoveLog(){ OriginalIndex = newItemIndex, ChangedIndex = j });
+                }
+                else
+                {
+                    //This is needed so the Locked Items go back to their places after all the moves
+                    changesLog.Add(new MoveLog(){ OriginalIndex = j, ChangedIndex = j });
+                }
             }
 
             _items.Clear();
             _items.AddRange(newItems);
+
+            this.RefreshIndexes();
 
             return changesLog;
         }

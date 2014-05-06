@@ -7,6 +7,9 @@ namespace ShakeMyList.Mobile
     {
         public static void Move<T>(this IList<T> list, int fromIndex, int toIndex)
         {
+            if (fromIndex == toIndex)
+                return;
+
             T item = list[fromIndex];
             int insertAt = toIndex;
             int deleteAt = fromIndex;
