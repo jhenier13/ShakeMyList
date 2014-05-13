@@ -1,7 +1,7 @@
 ﻿using System;
-using MonoTouch.UIKit;
-using MonoTouch.Foundation;
 using System.Drawing;
+using MonoTouch.Foundation;
+using MonoTouch.UIKit;
 using ShakeMyList.Mobile;
 
 namespace ShakeMyList.Iphone
@@ -10,13 +10,6 @@ namespace ShakeMyList.Iphone
     {
         public ShakeListCell(string cellID) : base(UITableViewCellStyle.Default, cellID)
         {
-//            UIImageView customBackground = new UIImageView(UIImage.FromFile("RoundedRectangle.png"));
-//            this.BackgroundView = customBackground;
-        }
-
-        public override void LayoutSubviews()
-        {
-            base.LayoutSubviews();
         }
     }
 
@@ -24,6 +17,9 @@ namespace ShakeMyList.Iphone
     {
         private const float LOCK_WIDTH = 30F;
         private const float LOCK_HEIGHT = 30F;
+        //Static Attributes
+        private static UIImage LOCK_ICON;
+        private static UIImage UNLOCK_ICON;
         //UIControls
         private UIButton __lockButton;
         //Events
@@ -59,12 +55,18 @@ namespace ShakeMyList.Iphone
             }
         }
 
+        static NoEditShakeItemCell()
+        {
+            LOCK_ICON = UIImage.FromFile("LockIcon.png");
+            UNLOCK_ICON = UIImage.FromFile("UnlockIcon.png");
+        }
+
         public NoEditShakeItemCell(string cellID) : base(UITableViewCellStyle.Default, cellID)
         {
             __lockButton = new UIButton(UIButtonType.Custom);
             __lockButton.TouchDown += this.LockButton_TouchDown;
-            __lockButton.SetImage(UIImage.FromFile("UnlockIcon.png"), UIControlState.Normal);
-            __lockButton.SetImage(UIImage.FromFile("LockIcon.png"), UIControlState.Selected);
+            __lockButton.SetImage(UNLOCK_ICON, UIControlState.Normal);
+            __lockButton.SetImage(LOCK_ICON, UIControlState.Selected);
         }
 
         public override void LayoutSubviews()

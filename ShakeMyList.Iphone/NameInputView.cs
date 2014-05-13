@@ -1,6 +1,6 @@
 ﻿using System;
 using MonoTouch.UIKit;
-using UIComponents.Frames;
+using LobaSoft.IOS.UIComponents.Frames;
 using System.Drawing;
 
 namespace ShakeMyList.Iphone
@@ -33,12 +33,25 @@ namespace ShakeMyList.Iphone
             this.View.BackgroundColor = UIColor.FromWhiteAlpha(0.8F, 0.5F);
         }
 
+        public void AttachEventHandlers()
+        {
+            __ok.TouchDown += this.OK_TouchDown;
+            __cancel.TouchDown += this.Cancel_TouchDown;
+        }
+
+        public void DetachEventHandlers()
+        {
+            __ok.TouchDown -= this.OK_TouchDown;
+            __cancel.TouchDown -= this.Cancel_TouchDown;
+        }
+
         public override void LoadView()
         {
             base.LoadView();
             this.CreateGrid();
             this.CreateUIControls();
-            this.AddUIControls();}
+            this.AddUIControls();
+        }
 
         public override void ViewDidLoad()
         {
@@ -48,9 +61,15 @@ namespace ShakeMyList.Iphone
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-
+            this.AttachEventHandlers();
             __innerFrame.Frame = new RectangleF(0, 0, this.View.Frame.Width, this.View.Frame.Height);
             __innerFrame.UpdateChildrenLayout();
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+            this.DetachEventHandlers();
         }
 
         private void CreateGrid()
@@ -76,11 +95,9 @@ namespace ShakeMyList.Iphone
 
             __ok = new UIButton(UIButtonType.System);
             __ok.SetTitle("Ok", UIControlState.Normal);
-            __ok.TouchDown += this.OK_TouchDown;
 
             __cancel = new UIButton(UIButtonType.System);
             __cancel.SetTitle("Cancel", UIControlState.Normal);
-            __cancel.TouchDown += this.Cancel_TouchDown;
 
             __innerWindow = new UIView();
             __innerWindow.BackgroundColor = UIColor.LightGray;

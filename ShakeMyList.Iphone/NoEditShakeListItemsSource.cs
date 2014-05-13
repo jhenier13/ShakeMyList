@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using LobaSoft.IOS.UIComponents.Events;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using ShakeMyList.Mobile;
-using UIComponents.Events;
 
 namespace ShakeMyList.Iphone
 {
@@ -36,12 +36,10 @@ namespace ShakeMyList.Iphone
             NoEditShakeItemCell cell = tableView.DequeueReusableCell(__cellIdentifier) as NoEditShakeItemCell;
 
             if (cell == null)
-            {
                 cell = new NoEditShakeItemCell(__cellIdentifier);
-                cell.Locked += ShakeItemCell_Locked;
-                cell.Unlocked += ShakeItemCell_Unlocked;
-            }
 
+            cell.Locked += ShakeItemCell_Locked;
+            cell.Unlocked += ShakeItemCell_Unlocked;
             ShakeItem item = __items[indexPath.Row];
             cell.TextLabel.Text = item.Name;
             cell.IsLocked = item.IsLocked;
@@ -49,6 +47,13 @@ namespace ShakeMyList.Iphone
             cell.Selected = item.IsMarked;
 
             return cell;
+        }
+
+        public override void CellDisplayingEnded(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
+        {
+            NoEditShakeItemCell shakeCell = cell as NoEditShakeItemCell;
+            shakeCell.Locked -= ShakeItemCell_Locked;
+            shakeCell.Unlocked -= ShakeItemCell_Unlocked;
         }
 
         public override bool CanMoveRow(UITableView tableView, NSIndexPath indexPath)

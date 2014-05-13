@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using ShakeMyList.Mobile;
-using UIComponents.Events;
+using LobaSoft.IOS.UIComponents.Events;
 
 namespace ShakeMyList.Iphone
 {
@@ -11,8 +11,8 @@ namespace ShakeMyList.Iphone
     {
         private IList<ShakeItem> __items;
         private string __cellIdentifier = "ShakeItemCell";
-        public MoveRowEventHandler RowMoved;
-        public DeleteRowEventHandler RowDeleted;
+        public event MoveRowEventHandler RowMoved;
+        public event DeleteRowEventHandler RowDeleted;
         public event EventHandler RowsScrolled;
 
         public ShakeListItemsSource(IList<ShakeItem> items)

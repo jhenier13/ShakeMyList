@@ -6,12 +6,13 @@ using MonoTouch.UIKit;
 using ShakeMyList.Mobile;
 using ShakeMyList.Mobile.Presenters;
 using ShakeMyList.Mobile.Views;
-using UIComponents.Events;
-using UIComponents.Frames;
+using LobaSoft.IOS.UIComponents.Events;
+using LobaSoft.IOS.UIComponents.Frames;
+using LobaSoft.IOS.UIComponents;
 
 namespace ShakeMyList.Iphone
 {
-    public class ShakeListEditorView :UIViewController, IShakeListEditorView
+    public class ShakeListEditorView :UIViewController, IShakeListEditorView, IDisposableView
     {
         //Attributes
         private AppViewMode __mode;
@@ -22,10 +23,12 @@ namespace ShakeMyList.Iphone
         private UITextField __newItem;
         private UIButton __addNewItem;
         private UIBarButtonItem __done;
+        private UIBarButtonItem __cancel;
         private UITableView __list;
-        private NameInputView __nameInput;
         //UIControls extras
         private ShakeListItemsSource __listSource;
+        //GestureRecognizers
+        private UITapGestureRecognizer __listTap;
 
         public string Name
         {
@@ -47,11 +50,15 @@ namespace ShakeMyList.Iphone
             }
             set
             {
+                if (__items == value)
+                    return;
+
+                if (__listSource != null)
+                    this.DetachListSourceEventHandlers();
+
                 __items = value;
                 __listSource = new ShakeListItemsSource(__items);
-                __listSource.RowMoved = this.ListSource_RowMoved;
-                __listSource.RowDeleted = this.ListSource_RowDeleted;
-                __listSource.RowsScrolled += (object sender, EventArgs e) => this.DismissKeyboard();
+                this.AttachListSourceEventHandlers();
                 __list.Source = __listSource;
             }
         }
@@ -83,6 +90,38 @@ namespace ShakeMyList.Iphone
         {
         }
 
+        public void AttachEventHandlers()
+        {
+            __addNewItem.TouchDown += this.AddNewItem_TouchDown;
+            __done.Clicked += this.DoneButton_Click;
+            __cancel.Clicked += this.Cancel_Clicked;
+
+            if (__listSource != null)
+                this.AttachListSourceEventHandlers();
+
+            this.AttachGestureRecognizersHandlers();
+        }
+
+        public void DetachEventHandlers()
+        {
+            __addNewItem.TouchDown -= this.AddNewItem_TouchDown;
+            __done.Clicked -= this.DoneButton_Click;
+            __cancel.Clicked -= this.Cancel_Clicked;
+
+            if (__listSource != null)
+                this.DetachListSourceEventHandlers();
+
+            this.DetachGestureRecognizersHandlers();
+        }
+
+        public void CleanSubViews()
+        {
+        }
+
+        public void AddSubViews()
+        {
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -95,33 +134,25 @@ namespace ShakeMyList.Iphone
             this.CreateGrid();
             this.CreateUIControls();
             this.AddUIControls();
-
-            this.CreateTapAndGesturesHandler();
+            this.CreateGesturesRecognizers();
         }
 
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+            this.NavigationItem.HidesBackButton = true;
+            this.AttachEventHandlers();
 
             __innerFrame.Frame = new RectangleF(0, 0, this.View.Frame.Width, this.View.Frame.Height);
             __innerFrame.UpdateChildrenLayout();
-
             __list.SetEditing(true, true);
             __presenter.LoadData();
         }
 
-        private void CreateTapAndGesturesHandler()
+        public override void ViewDidDisappear(bool animated)
         {
-            UITapGestureRecognizer tap = new UITapGestureRecognizer();
-            tap.CancelsTouchesInView = false;
-            tap.AddTarget(new Action<NSObject>(((NSObject obj) => this.DismissKeyboard())));
-
-            __list.AddGestureRecognizer(tap);
-        }
-
-        private void DismissKeyboard()
-        {
-            __newItem.ResignFirstResponder();
+            base.ViewDidDisappear(animated);
+            this.DetachEventHandlers();
         }
 
         private void CreateGrid()
@@ -148,12 +179,12 @@ namespace ShakeMyList.Iphone
             __addNewItem.Frame = new RectangleF(0, 0, 60, 0);
             __addNewItem.SetTitle("ADD", UIControlState.Normal);
             __addNewItem.Font = UIFont.BoldSystemFontOfSize(16);
-            __addNewItem.TouchDown += this.AddNewItem_TouchDown;
 
             __done = new UIBarButtonItem();
             __done.Style = UIBarButtonItemStyle.Done;
             __done.Title = "Done";
-            __done.Clicked += this.DoneButton_Click;
+
+            __cancel = new UIBarButtonItem(UIBarButtonSystemItem.Cancel);
 
             __list = new UITableView();
         }
@@ -165,13 +196,45 @@ namespace ShakeMyList.Iphone
             __innerFrame.AddChild(__list, 1, 0);
 
             this.NavigationItem.RightBarButtonItem = __done;
+            this.NavigationItem.LeftBarButtonItem = __cancel;
 
             this.Add(__innerFrame);
         }
 
-        private void GoBackToList()
+        private void CreateGesturesRecognizers()
         {
-            this.NavigationController.PopViewControllerAnimated(true);
+            __listTap = new UITapGestureRecognizer();
+            __listTap.CancelsTouchesInView = false;
+            __listTap.AddTarget(new Action<NSObject>(((NSObject obj) => this.DismissKeyboard())));
+        }
+
+        private void AttachListSourceEventHandlers()
+        {
+            __listSource.RowMoved += this.ListSource_RowMoved;
+            __listSource.RowDeleted += this.ListSource_RowDeleted;
+            __listSource.RowsScrolled += this.ListSource_RowsScrolled;
+        }
+
+        private void DetachListSourceEventHandlers()
+        {
+            __listSource.RowMoved -= this.ListSource_RowMoved;
+            __listSource.RowDeleted -= this.ListSource_RowDeleted;
+            __listSource.RowsScrolled -= this.ListSource_RowsScrolled;
+        }
+
+        private void AttachGestureRecognizersHandlers()
+        {
+            __list.AddGestureRecognizer(__listTap);
+        }
+
+        private void DetachGestureRecognizersHandlers()
+        {
+            __list.RemoveGestureRecognizer(__listTap);
+        }
+
+        private void DismissKeyboard()
+        {
+            __newItem.ResignFirstResponder();
         }
 
         private void BeReplacedWithViewer()
@@ -186,24 +249,19 @@ namespace ShakeMyList.Iphone
 
         private void RequestName()
         {
-            if (__nameInput == null)
-            {
-                __nameInput = new NameInputView();
-                __nameInput.ModalInPopover = true;
-                __nameInput.Ok += this.NameInput_Ok;
-                __nameInput.Cancel += this.NameInput_Cancel;
-            }
+            NameInputView nameInput = new NameInputView();
+            nameInput.ModalInPopover = true;
+            nameInput.Ok += this.NameInput_Ok;
+            nameInput.Cancel += this.NameInput_Cancel;
 
-            __nameInput.Name = this.Title;
-            this.PresentViewController(__nameInput, true, null);
+            nameInput.Name = this.Title;
+            this.PresentViewController(nameInput, true, null);
         }
 
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
             this.DismissKeyboard();
         }
-
-        #region UIControls Events
 
         private void AddNewItem_TouchDown(object sender, EventArgs e)
         {
@@ -234,11 +292,16 @@ namespace ShakeMyList.Iphone
                     break;
                 case AppViewMode.Edit:
                     __presenter.Save();
-                    this.GoBackToList();
+                    this.NavigationController.PopViewControllerAnimated(true);
                     break;
                 default:
                     throw new InvalidOperationException("This mode hasn't Done Action");
             }
+        }
+
+        private void Cancel_Clicked(object sender, EventArgs e)
+        {
+            this.NavigationController.PopViewControllerAnimated(true);
         }
 
         private void ListSource_RowMoved(object sender, MoveRowEventArgs e)
@@ -251,9 +314,17 @@ namespace ShakeMyList.Iphone
             __presenter.DeleteItem(e.DeleteIndex);
         }
 
+        private void ListSource_RowsScrolled(object sender, EventArgs e)
+        {
+            this.DismissKeyboard();
+        }
+
         private void NameInput_Ok(object sender, EventArgs e)
         {
-            this.Name = __nameInput.Name;
+            NameInputView nameInput = sender as NameInputView;
+            this.Name = nameInput.Name;
+            nameInput.Ok -= NameInput_Ok;
+            nameInput.Cancel -= NameInput_Cancel;
             __presenter.Save();
             this.DismissViewController(true, null);
             this.BeReplacedWithViewer();
@@ -261,10 +332,11 @@ namespace ShakeMyList.Iphone
 
         private void NameInput_Cancel(object sender, EventArgs e)
         {
+            NameInputView nameInput = sender as NameInputView;
+            nameInput.Ok -= NameInput_Ok;
+            nameInput.Cancel -= NameInput_Cancel;
             this.DismissViewController(true, null);
         }
-
-        #endregion
     }
 }
 

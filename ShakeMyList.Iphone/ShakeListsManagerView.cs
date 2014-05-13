@@ -1,22 +1,28 @@
 ﻿using System;
-using MonoTouch.UIKit;
-using ShakeMyList.Mobile.Views;
-using ShakeMyList.Mobile;
 using System.Collections.Generic;
-using ShakeMyList.Mobile.Presenters;
-using UIComponents.Frames;
 using System.Drawing;
-using UIComponents.Events;
+using LobaSoft.IOS.UIComponents;
+using LobaSoft.IOS.UIComponents.Events;
+using LobaSoft.IOS.UIComponents.Frames;
+using MonoTouch.UIKit;
+using ShakeMyList.Mobile;
+using ShakeMyList.Mobile.Presenters;
+using ShakeMyList.Mobile.Views;
 
 namespace ShakeMyList.Iphone
 {
-    public class ShakeListsManagerView : UIViewController, IShakeListsManagerView
+    public class ShakeListsManagerView : UIViewController, IShakeListsManagerView, IDisposableView
     {
+        //Attributes
         private ShakeListsManagerPresenter __presenter;
+        private List<ShakeList> __allLists;
+        //UIControls
         private GridView __innerFrame;
         private UITableView __table;
         private UIBarButtonItem __edit;
-        private List<ShakeList> __allLists;
+        private UIBarButtonItem __add;
+        private UIBarButtonItem __generator;
+        //UIControls Extras
         private ShakeListsSource __listsSource;
 
         public List<ShakeList> AllLists
@@ -27,10 +33,15 @@ namespace ShakeMyList.Iphone
             }
             set
             {
+                if (__allLists == value)
+                    return;
+
+                if (__listsSource != null)
+                    this.DetachListsEventHandlers();
+
                 __allLists = value;
                 __listsSource = new ShakeListsSource(__allLists);
-                __listsSource.RowHasBeenSelected = this.ListsSource_RowHasBeenSelected;
-                __listsSource.RowDeleted = this.ListsSource_RowDeleted;
+                this.AttachListsEventHandlers();
                 __table.Source = __listsSource;
             }
         }
@@ -42,6 +53,34 @@ namespace ShakeMyList.Iphone
             this.View.BackgroundColor = UIColor.White;
             __presenter = new ShakeListsManagerPresenter(this);
             this.Title = "Lists";
+        }
+
+        public void AttachEventHandlers()
+        {
+            __edit.Clicked += this.EditButton_Click;
+            __add.Clicked += this.Add_Clicked;
+            __generator.Clicked += this.Generator_Clicked;
+
+            if (__listsSource != null)
+                this.AttachListsEventHandlers();
+        }
+
+        public void DetachEventHandlers()
+        {
+            __edit.Clicked -= this.EditButton_Click;
+            __add.Clicked -= this.Add_Clicked;
+            __generator.Clicked -= this.Generator_Clicked;
+
+            if (__listsSource != null)
+                this.DetachListsEventHandlers();
+        }
+
+        public void CleanSubViews()
+        {
+        }
+
+        public void AddSubViews()
+        {
         }
 
         public override void ViewDidLoad()
@@ -60,11 +99,19 @@ namespace ShakeMyList.Iphone
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+            this.NavigationController.ToolbarHidden = false;
+            this.AttachEventHandlers();
 
             __innerFrame.Frame = new RectangleF(0, 0, this.View.Frame.Width, this.View.Frame.Height);
             __innerFrame.UpdateChildrenLayout();
 
             __presenter.LoadData();
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+            this.DetachEventHandlers();
         }
 
         private void CreateGrid()
@@ -78,7 +125,12 @@ namespace ShakeMyList.Iphone
             __edit = new UIBarButtonItem();
             __edit.Style = UIBarButtonItemStyle.Plain;
             __edit.Title = "Edit";
-            __edit.Clicked += this.EditButton_Click;
+
+            __add = new UIBarButtonItem(UIBarButtonSystemItem.Add);
+
+            __generator = new UIBarButtonItem();
+            __generator.Title = "Generator";
+            __generator.Style = UIBarButtonItemStyle.Plain;
 
             __table = new UITableView();
         }
@@ -88,8 +140,25 @@ namespace ShakeMyList.Iphone
             __innerFrame.AddChild(__table);
 
             this.NavigationItem.RightBarButtonItem = __edit;
+            this.NavigationItem.LeftBarButtonItem = __add;
+
+            UIBarButtonItem dummy1 = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
+            UIBarButtonItem dummy2 = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
+            this.ToolbarItems = new UIBarButtonItem[]{ dummy1, __generator, dummy2 };
 
             this.Add(__innerFrame);
+        }
+
+        private void AttachListsEventHandlers()
+        {
+            __listsSource.RowHasBeenSelected += this.ListsSource_RowHasBeenSelected;
+            __listsSource.RowDeleted += this.ListsSource_RowDeleted;
+        }
+
+        private void DetachListsEventHandlers()
+        {
+            __listsSource.RowHasBeenSelected -= this.ListsSource_RowHasBeenSelected;
+            __listsSource.RowDeleted -= this.ListsSource_RowDeleted;
         }
 
         private void EditButton_Click(object sender, EventArgs e)
@@ -108,11 +177,25 @@ namespace ShakeMyList.Iphone
             }
         }
 
+        private void Add_Clicked(object sender, EventArgs e)
+        {
+            this.NavigationController.ToolbarHidden = true;
+            ShakeListEditorView newListView = new ShakeListEditorView();
+            this.NavigationController.PushViewController(newListView, true);
+        }
+
+        private void Generator_Clicked(object sender, EventArgs e)
+        {
+//            this.NavigationController.ToolbarHidden = true;
+            //Go the the generator view
+        }
+
         private void ListsSource_RowHasBeenSelected(object sender, SelectRowEventArgs e)
         {
             if (__table.Editing)
                 return;
 
+            this.NavigationController.ToolbarHidden = true;
             ShakeList list = __presenter.ListFrom(e.SelectedIndex);
             ShakeListViewerView listView = new ShakeListViewerView(list);
 

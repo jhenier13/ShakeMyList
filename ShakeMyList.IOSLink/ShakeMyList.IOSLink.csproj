@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A9E4D26E-2061-458E-9C6E-2DB8993BF277}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -61,9 +61,6 @@
     <Compile Include="..\ShakeMyList.Mobile\StringUtils.cs">
       <Link>StringUtils.cs</Link>
     </Compile>
-    <Compile Include="..\ShakeMyList.Mobile\Views\IMenuView.cs">
-      <Link>Views\IMenuView.cs</Link>
-    </Compile>
     <Compile Include="..\ShakeMyList.Mobile\Views\IShakeListEditorView.cs">
       <Link>Views\IShakeListEditorView.cs</Link>
     </Compile>
@@ -72,9 +69,6 @@
     </Compile>
     <Compile Include="..\ShakeMyList.Mobile\Views\IShakeListViewerView.cs">
       <Link>Views\IShakeListViewerView.cs</Link>
-    </Compile>
-    <Compile Include="..\ShakeMyList.Mobile\Presenters\MenuPresenter.cs">
-      <Link>Presenters\MenuPresenter.cs</Link>
     </Compile>
     <Compile Include="..\ShakeMyList.Mobile\Presenters\ShakeListEditorPresenter.cs">
       <Link>Presenters\ShakeListEditorPresenter.cs</Link>

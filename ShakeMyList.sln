@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeMyList.Iphone", "Shake
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeMyList.Mobile", "ShakeMyList.Mobile\ShakeMyList.Mobile.csproj", "{C0198A3A-A99A-4CE9-9D3D-73F2C70FBDCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIComponents", "..\LobaSoft.IOS\UIComponents\UIComponents.csproj", "{F544C0A6-7A53-4629-B700-907342C0AF88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIComponents", "..\LobaSoft.IOS\LobaSoft.IOS.UIComponents\LobaSoft.IOS.UIComponents.csproj", "{F544C0A6-7A53-4629-B700-907342C0AF88}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeMyList.IOSLink", "ShakeMyList.IOSLink\ShakeMyList.IOSLink.csproj", "{A9E4D26E-2061-458E-9C6E-2DB8993BF277}"
 EndProject

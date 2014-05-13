@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using UIComponents;
+using LobaSoft.IOS.UIComponents;
 using System.Drawing;
 using ShakeMyList.Mobile.Persistence;
 

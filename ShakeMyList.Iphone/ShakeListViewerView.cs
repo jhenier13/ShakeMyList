@@ -6,12 +6,13 @@ using MonoTouch.UIKit;
 using ShakeMyList.Mobile;
 using ShakeMyList.Mobile.Presenters;
 using ShakeMyList.Mobile.Views;
-using UIComponents.Events;
-using UIComponents.Frames;
+using LobaSoft.IOS.UIComponents.Events;
+using LobaSoft.IOS.UIComponents.Frames;
+using LobaSoft.IOS.UIComponents;
 
 namespace ShakeMyList.Iphone
 {
-    public class ShakeListViewerView : UIViewController, IShakeListViewerView
+    public class ShakeListViewerView : UIViewController, IShakeListViewerView, IDisposableView
     {
         //Attributes
         private ShakeListViewerPresenter __presenter;
@@ -22,8 +23,6 @@ namespace ShakeMyList.Iphone
         private UITableView __listItems;
         private UIButton __shake;
         private UIBarButtonItem __options;
-        private UIActionSheet __optionsSheet;
-        private NameInputView __nameInput;
         //UIControls Extras
         private NoEditShakeListItemsSource __listSource;
 
@@ -47,13 +46,15 @@ namespace ShakeMyList.Iphone
             }
             set
             {
+                if (__items == value)
+                    return;
+
+                if (__listSource != null)
+                    this.DetachListSourceEventHandlers();
+
                 __items = value;
                 __listSource = new NoEditShakeListItemsSource(__items);
-                __listSource.RowMoved += this.ItemsSource_RowMoved;
-                __listSource.RowLocked += this.ItemsSource_RowLocked;
-                __listSource.RowUnlocked += this.ItemsSource_RowUnlocked;
-                __listSource.RowMarked += this.ItemsSource_RowMarked;
-                __listSource.RowUnmarked += this.ItemsSource_RowUnmarked;
+                this.AttachListSourceEventHandlers();
                 __listItems.Source = __listSource;
             }
         }
@@ -63,6 +64,32 @@ namespace ShakeMyList.Iphone
             this.EdgesForExtendedLayout = UIRectEdge.None;
             this.View.BackgroundColor = UIColor.White;
             __presenter = new ShakeListViewerPresenter(this, list);
+        }
+
+        public void AttachEventHandlers()
+        {
+            __shake.TouchDown += this.Shake_TouchDown;
+            __options.Clicked += this.Options_Click;
+
+            if (__listSource != null)
+                this.AttachListSourceEventHandlers();
+        }
+
+        public void DetachEventHandlers()
+        {
+            __shake.TouchDown -= this.Shake_TouchDown;
+            __options.Clicked -= this.Options_Click;
+
+            if (__listSource != null)
+                this.DetachListSourceEventHandlers();
+        }
+
+        public void CleanSubViews()
+        {
+        }
+
+        public void AddSubViews()
+        {
         }
 
         public override void LoadView()
@@ -82,6 +109,7 @@ namespace ShakeMyList.Iphone
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+            this.AttachEventHandlers();
 
             __innerFrame.Frame = new RectangleF(0, 0, this.View.Frame.Width, this.View.Frame.Height);
             __innerFrame.UpdateChildrenLayout();
@@ -102,6 +130,7 @@ namespace ShakeMyList.Iphone
         {
             this.ResignFirstResponder();
             base.ViewDidDisappear(animated);
+            this.DetachEventHandlers();
         }
 
         public override bool CanBecomeFirstResponder
@@ -130,17 +159,14 @@ namespace ShakeMyList.Iphone
             {
                 MoveLog log = changes[i];
 
-                Console.WriteLine("MoveLog From: {0}  To: {1}", log.OriginalIndex, log.ChangedIndex);
                 ShakeItem itemToMove = itemsStartState[log.OriginalIndex];
                 int itemIndexInView = __items.IndexOf(itemToMove);
-                Console.WriteLine("ItemIndexInView: {0}", itemIndexInView);
 
                 NSIndexPath source = NSIndexPath.FromRowSection(itemIndexInView, 0);
                 NSIndexPath destiny = NSIndexPath.FromRowSection(log.ChangedIndex, 0);
 
                 __listItems.MoveRow(source, destiny);
                 __items.Move(source.Row, destiny.Row);
-                Console.WriteLine("MoveRow  From: {0}  To: {1}", source.Row, destiny.Row);
             }
         }
 
@@ -161,12 +187,10 @@ namespace ShakeMyList.Iphone
             __shake.BackgroundColor = UIColor.FromWhiteAlpha(0.8F, 0.5F);
             __shake.SetTitle("Shake", UIControlState.Normal);
             __shake.Font = UIFont.BoldSystemFontOfSize(25F);
-            __shake.TouchDown += this.Shake_TouchDown;
 
             __options = new UIBarButtonItem();
             __options.Style = UIBarButtonItemStyle.Plain;
             __options.Title = "Options";
-            __options.Clicked += this.Options_Click;
 
             __listItems = new UITableView();
         }
@@ -179,6 +203,24 @@ namespace ShakeMyList.Iphone
             this.NavigationItem.RightBarButtonItem = __options;
 
             this.Add(__innerFrame);
+        }
+
+        private void AttachListSourceEventHandlers()
+        {
+            __listSource.RowMoved += this.ItemsSource_RowMoved;
+            __listSource.RowLocked += this.ItemsSource_RowLocked;
+            __listSource.RowUnlocked += this.ItemsSource_RowUnlocked;
+            __listSource.RowMarked += this.ItemsSource_RowMarked;
+            __listSource.RowUnmarked += this.ItemsSource_RowUnmarked;
+        }
+
+        private void DetachListSourceEventHandlers()
+        {
+            __listSource.RowMoved -= this.ItemsSource_RowMoved;
+            __listSource.RowLocked -= this.ItemsSource_RowLocked;
+            __listSource.RowUnlocked -= this.ItemsSource_RowUnlocked;
+            __listSource.RowMarked -= this.ItemsSource_RowMarked;
+            __listSource.RowUnmarked -= this.ItemsSource_RowUnmarked;
         }
 
         private void ShakeDevice()
@@ -204,41 +246,36 @@ namespace ShakeMyList.Iphone
 
         private void ShowRenameWindow()
         {
-            if (__nameInput == null)
-            {
-                __nameInput = new NameInputView();
-                __nameInput.Ok += this.NameInput_OK;
-                __nameInput.Cancel += this.NameInput_Cancel;
-            }
+            NameInputView nameInput = new NameInputView();
+            nameInput.Ok += this.NameInput_OK;
+            nameInput.Cancel += this.NameInput_Cancel;
 
-            __nameInput.Name = this.Title;
-            this.PresentViewController(__nameInput, true, null);
+            nameInput.Name = this.Title;
+            this.PresentViewController(nameInput, true, null);
         }
 
         private void CloneListAndGoToEditView()
         {
             ShakeList listClon = __presenter.Clone();
+
             ShakeListEditorView listEditor = new ShakeListEditorView(listClon, true);
             UIViewController[] controllers = this.NavigationController.ViewControllers;
             controllers[controllers.Length - 1] = listEditor;
-
             this.NavigationController.SetViewControllers(controllers, true);
         }
 
-        #region EventHandlers
-
         private void Options_Click(object sender, EventArgs e)
         {
-            __optionsSheet = new UIActionSheet(string.Empty);
-            __optionsSheet.AddButton("Save");
-            __optionsSheet.AddButton("Rename");
-            __optionsSheet.AddButton("Edit");
-            __optionsSheet.AddButton("Clone");
-            __optionsSheet.AddButton("Cancel");
-            __optionsSheet.CancelButtonIndex = 4;
-            __optionsSheet.Clicked += this.Option_Selected;
+            UIActionSheet optionsSheet = new UIActionSheet(string.Empty);
+            optionsSheet.AddButton("Save");
+            optionsSheet.AddButton("Rename");
+            optionsSheet.AddButton("Edit");
+            optionsSheet.AddButton("Clone");
+            optionsSheet.AddButton("Cancel");
+            optionsSheet.CancelButtonIndex = 4;
+            optionsSheet.Clicked += this.Option_Selected;
 
-            __optionsSheet.ShowInView(this.View);
+            optionsSheet.ShowInView(this.View);
         }
 
         private void Shake_TouchDown(object sender, EventArgs e)
@@ -295,17 +332,21 @@ namespace ShakeMyList.Iphone
 
         private void NameInput_OK(object sender, EventArgs e)
         {
-            string newName = __nameInput.Name;
+            NameInputView nameInput = sender as NameInputView;
+            string newName = nameInput.Name;
             __presenter.RenameShakeListName(newName);
+            nameInput.Ok -= NameInput_OK;
+            nameInput.Cancel -= NameInput_Cancel;
             this.DismissViewController(true, null);
         }
 
         private void NameInput_Cancel(object sender, EventArgs e)
         {
+            NameInputView nameInput = sender as NameInputView;
+            nameInput.Ok -= NameInput_OK;
+            nameInput.Cancel -= NameInput_Cancel;
             this.DismissViewController(true, null);
         }
-
-        #endregion
     }
 }
 

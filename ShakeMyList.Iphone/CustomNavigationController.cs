@@ -6,8 +6,6 @@ namespace ShakeMyList.Iphone
 {
     public class CustomNavigationController : UINavigationController
     {
-        private MainMenuView __menuView;
-
         public CustomNavigationController()
         {
             this.View.AutosizesSubviews = false;
@@ -34,9 +32,8 @@ namespace ShakeMyList.Iphone
         {
             base.LoadView();
 
-            RectangleF menuFrame = new RectangleF(0, this.NavigationBar.Frame.Height, this.View.Frame.Width, this.View.Frame.Height - this.NavigationBar.Frame.Height);
-            __menuView = new MainMenuView(menuFrame);
-            this.PushViewController(__menuView, true);
+            ShakeListsManagerView listsManager = new ShakeListsManagerView();
+            this.PushViewController(listsManager, true);
         }
 
         public override void ViewWillLayoutSubviews()

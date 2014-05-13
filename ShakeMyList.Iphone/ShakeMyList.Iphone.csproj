@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A63E111F-DF42-4DEF-A526-921C8722A928}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -101,8 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
-    <BundleResource Include="Resources\ListButton.png" />
-    <BundleResource Include="Resources\AddButton.png" />
     <BundleResource Include="Resources\RoundedRectangle.png" />
     <BundleResource Include="Resources\LockIcon.png" />
     <BundleResource Include="Resources\UnlockIcon.png" />
@@ -114,9 +112,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="MainMenuView.cs" />
     <Compile Include="CustomNavigationController.cs" />
-    <Compile Include="CustomViewController.cs" />
     <Compile Include="ShakeListEditorView.cs" />
     <Compile Include="ShakeListCell.cs" />
     <Compile Include="ShakeListsManagerView.cs" />
@@ -133,9 +129,9 @@
       <Project>{A9E4D26E-2061-458E-9C6E-2DB8993BF277}</Project>
       <Name>ShakeMyList.IOSLink</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\LobaSoft.IOS\UIComponents\UIComponents.csproj">
+    <ProjectReference Include="..\..\LobaSoft.IOS\LobaSoft.IOS.UIComponents\LobaSoft.IOS.UIComponents.csproj">
       <Project>{F544C0A6-7A53-4629-B700-907342C0AF88}</Project>
-      <Name>UIComponents</Name>
+      <Name>LobaSoft.IOS.UIComponents</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
