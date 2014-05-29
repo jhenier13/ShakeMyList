@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ShakeMyList.Mobile.Persistence;
+using LobaSoft.Common;
 
 namespace ShakeMyList.Mobile
 {

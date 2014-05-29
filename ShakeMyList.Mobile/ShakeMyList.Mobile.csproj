@@ -54,13 +54,17 @@
     <Compile Include="Persistence\ShakeItem_DB.cs" />
     <Compile Include="ApplicationFormats.cs" />
     <Compile Include="StringUtils.cs" />
-    <Compile Include="RandomGenerator.cs" />
-    <Compile Include="ListUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Persistence\" />
     <Folder Include="Presenters\" />
     <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LobaSoft.Common\LobaSoft.Common\LobaSoft.Common.csproj">
+      <Project>{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}</Project>
+      <Name>LobaSoft.Common</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

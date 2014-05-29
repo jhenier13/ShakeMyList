@@ -129,7 +129,7 @@ namespace ShakeMyList.Iphone
             __add = new UIBarButtonItem(UIBarButtonSystemItem.Add);
 
             __generator = new UIBarButtonItem();
-            __generator.Title = "Generator";
+            __generator.Title = "Get Magic Number!";
             __generator.Style = UIBarButtonItemStyle.Plain;
 
             __table = new UITableView();

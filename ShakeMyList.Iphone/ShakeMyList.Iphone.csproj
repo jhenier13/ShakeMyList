@@ -133,5 +133,9 @@
       <Project>{F544C0A6-7A53-4629-B700-907342C0AF88}</Project>
       <Name>LobaSoft.IOS.UIComponents</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LobaSoft.Common\LobaSoft.Common.IOSLink\LobaSoft.Common.IOSLink.csproj">
+      <Project>{F7F392E7-047D-405A-9B06-F306A25B31B7}</Project>
+      <Name>LobaSoft.Common.IOSLink</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

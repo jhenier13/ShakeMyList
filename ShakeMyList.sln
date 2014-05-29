@@ -5,9 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeMyList.Iphone", "Shake
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeMyList.Mobile", "ShakeMyList.Mobile\ShakeMyList.Mobile.csproj", "{C0198A3A-A99A-4CE9-9D3D-73F2C70FBDCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIComponents", "..\LobaSoft.IOS\LobaSoft.IOS.UIComponents\LobaSoft.IOS.UIComponents.csproj", "{F544C0A6-7A53-4629-B700-907342C0AF88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LobaSoft.IOS.UIComponents", "..\LobaSoft.IOS\LobaSoft.IOS.UIComponents\LobaSoft.IOS.UIComponents.csproj", "{F544C0A6-7A53-4629-B700-907342C0AF88}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeMyList.IOSLink", "ShakeMyList.IOSLink\ShakeMyList.IOSLink.csproj", "{A9E4D26E-2061-458E-9C6E-2DB8993BF277}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LobaSoft.Common.IOSLink", "..\LobaSoft.Common\LobaSoft.Common.IOSLink\LobaSoft.Common.IOSLink.csproj", "{F7F392E7-047D-405A-9B06-F306A25B31B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LobaSoft.Common", "..\LobaSoft.Common\LobaSoft.Common\LobaSoft.Common.csproj", "{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +23,18 @@ Global
 		AppStore|iPhone = AppStore|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Release|iPhone.Build.0 = Release|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{4926D8BA-CB8C-46ED-B077-7EC1404E9E75}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{A63E111F-DF42-4DEF-A526-921C8722A928}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
 		{A63E111F-DF42-4DEF-A526-921C8722A928}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
 		{A63E111F-DF42-4DEF-A526-921C8722A928}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
@@ -67,6 +83,18 @@ Global
 		{F544C0A6-7A53-4629-B700-907342C0AF88}.Release|iPhone.Build.0 = Release|Any CPU
 		{F544C0A6-7A53-4629-B700-907342C0AF88}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{F544C0A6-7A53-4629-B700-907342C0AF88}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Release|iPhone.Build.0 = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{F7F392E7-047D-405A-9B06-F306A25B31B7}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = ShakeMyList.Iphone\ShakeMyList.Iphone.csproj

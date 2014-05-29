@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShakeMyList.Mobile.Views;
+using LobaSoft.Common;
 
 namespace ShakeMyList.Mobile.Presenters
 {

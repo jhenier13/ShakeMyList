@@ -97,11 +97,11 @@
     <Compile Include="..\ShakeMyList.Mobile\Persistence\SQLiteLinker.cs">
       <Link>Persistence\SQLiteLinker.cs</Link>
     </Compile>
-    <Compile Include="..\ShakeMyList.Mobile\RandomGenerator.cs">
-      <Link>RandomGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\ShakeMyList.Mobile\ListUtils.cs">
-      <Link>ListUtils.cs</Link>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LobaSoft.Common\LobaSoft.Common.IOSLink\LobaSoft.Common.IOSLink.csproj">
+      <Project>{F7F392E7-047D-405A-9B06-F306A25B31B7}</Project>
+      <Name>LobaSoft.Common.IOSLink</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

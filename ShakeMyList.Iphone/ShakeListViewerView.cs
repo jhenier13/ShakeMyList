@@ -9,6 +9,7 @@ using ShakeMyList.Mobile.Views;
 using LobaSoft.IOS.UIComponents.Events;
 using LobaSoft.IOS.UIComponents.Frames;
 using LobaSoft.IOS.UIComponents;
+using LobaSoft.Common;
 
 namespace ShakeMyList.Iphone
 {
